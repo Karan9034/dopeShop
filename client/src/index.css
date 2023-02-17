@@ -1,0 +1,74 @@
+html {
+  font-size: 10px;
+  font-family: sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#loader{
+  font-size: 3rem;
+}
+
+/* SiteNavbar begins */
+nav {
+  height: 6rem;
+  padding: 0 3rem !important;
+}
+.navbar-brand{
+  font-size: 2rem;
+  cursor: pointer;
+}
+.nav-link, .nav-item{
+  padding-top: 1rem;
+}
+.img{
+  padding: 0;
+}
+.text-secondary{
+  margin-right: 2rem;
+  font-size: 1.5rem;
+}
+/* SiteNavbar ends */
+
+
+
+/* Main starts */
+.main{
+  margin-top: 8rem;
+  margin-left: 25%;
+  margin-right: 25%;
+  width: 50%;
+}
+
+/* Main ends */
+
+/* ProductList starts */
+#productList{
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
+}
+#productList .card-text{
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+}
+#productList .card-text div{
+  flex: 5;
+}
+#productList .productName{
+  font-size: 24px;
+  font-weight: bold;
+}
+#productList .productPrice{
+  font-size: 14px;
+}
+#productList .card-text button{
+  flex: 1;
+  height: 38px;
+  font-size: 14px;
+}
