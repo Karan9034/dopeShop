@@ -47,27 +47,27 @@ nav {
 /* Main ends */
 
 /* ProductList starts */
-#productList{
+#productList, #orderList, #salesList{
   margin-left: 10%;
   margin-right: 10%;
   width: 80%;
 }
-#productList .card-text{
+#productList .card-text, #orderList .card-text, #salesList .card-text{
   padding: 1rem 2rem;
   display: flex;
   align-items: center;
 }
-#productList .card-text div{
+#productList .card-text div, #orderList .card-text div, #salesList .card-text div{
   flex: 5;
 }
-#productList .productName{
+#productList .productName, #orderList .productName, #salesList .productName{
   font-size: 24px;
   font-weight: bold;
 }
-#productList .productPrice{
+#productList .productPrice, #orderList .productPrice, #salesList .productPrice, #orderList .productBuyer, #salesList .productBuyer{
   font-size: 14px;
 }
-#productList .card-text button{
+#productList .card-text button, #orderList .card-text button, #salesList .card-text button{
   flex: 1;
   height: 38px;
   font-size: 14px;

@@ -1,5 +1,5 @@
 import React from "react";
-import FlipChain from './contracts/FlipChain.json';
+import DopeShop from './contracts/DopeShop.json';
 import Web3 from 'web3';
 import Navbar from './components/SiteNavbar';
 import Main from './components/Main';
@@ -23,10 +23,11 @@ class App extends React.Component{
     super(props)
     this.state = {
       account: '',
-      flipchain: null,
+      dopeShop: null,
       products: [],
       orders: [],
       sales: [],
+      myProducts: [],
       loading: true,
       show: 'products'
     }
@@ -61,23 +62,46 @@ class App extends React.Component{
     this.setState({ account: accounts[0] })
 
     const networkId = await web3.eth.net.getId()
-    const networkData = FlipChain.networks[networkId]
+    const networkData = DopeShop.networks[networkId]
     if(networkData) {
-      const flipchain = new web3.eth.Contract(FlipChain.abi, networkData.address)
-      this.setState({ flipchain })
-      const productCount = await flipchain.methods.productCount().call()
-      this.setState({ productCount })
+      const dopeshop = new web3.eth.Contract(DopeShop.abi, networkData.address)
+      this.setState({ dopeshop })
+      const productCount = await dopeshop.methods.productCount().call()
 
       for(let i = productCount; i > 0; i--) {
-        const product = await flipchain.methods.products(i).call()
-        this.setState({
-          products: [...this.state.products, product]
-        })
+        var product = await dopeshop.methods.products(i).call()
+        if(product.seller===this.state.account){
+          this.setState({
+            myProducts: [...this.state.myProducts, product]
+          })
+        }else{
+          this.setState({
+            products: [...this.state.products, product]
+          })
+        }
       }
+
+      const ordersCount = await dopeshop.methods.ordersCount().call()
+      for(let i = ordersCount; i > 0; i--) {
+        var order = await dopeshop.methods.orders(i).call()
+        product = await dopeshop.methods.products(order.productId).call()
+        order = {...order, imgHash: product.imgHash, name: product.name, price: product.price}
+        if(order.seller===this.state.account){
+          this.setState({
+            sales: [...this.state.sales, order]
+          })
+        }else if(order.buyer===this.state.account){
+          this.setState({
+            orders: [...this.state.orders, order]
+          })
+        }
+      }
+
+
       this.setState({ loading: false })
-      console.log(this.state.products)
+      console.log(this.state.products, this.state.orders, this.state.sales)
     } else {
-      window.alert('Flipchain contract not deployed to detected network.')
+      window.alert('dopeShop contract not deployed to detected network.')
     }
   }
 
@@ -106,7 +130,7 @@ class App extends React.Component{
           console.error(err)
           return
         }
-        this.state.flipchain.methods.addProduct(name, res.path, price).send({from: this.state.account}).on('transactionHash', (hash) => {
+        this.state.dopeshop.methods.addProduct(name, res.path, price).send({from: this.state.account}).on('transactionHash', async (hash) => {
           this.setState({loading: false})
           console.log(name, price)
         })
@@ -115,7 +139,7 @@ class App extends React.Component{
 
   createOrder(productId, price){
     this.setState({loading: true})
-    this.state.flipchain.methods.createOrder(productId).send({from: this.state.account, value: Web3.utils.toWei(price, 'Ether') }).on('transactionHash', (hash) => {
+    this.state.dopeshop.methods.createOrder(productId).send({from: this.state.account, value: Web3.utils.toWei(price, 'Ether') }).on('transactionHash', (hash) => {
       this.setState({loading: false})
       console.log('ordered')
     })
@@ -132,6 +156,7 @@ class App extends React.Component{
                 <Main
                   show={this.state.show}
                   products={this.state.products}
+                  myProducts={this.state.myProducts}
                   orders={this.state.orders}
                   sales={this.state.sales}
                   captureFile={this.captureFile}

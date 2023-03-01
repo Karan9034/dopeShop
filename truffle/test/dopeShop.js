@@ -1,20 +1,20 @@
-const FlipChain = artifacts.require("FlipChain");
+const DopeShop = artifacts.require("DopeShop");
 
 require('chai')
     .use(require('chai-as-promised'))
     .should()
 
-contract('FlipChain', ([deployer, seller, buyer]) => {
-    let flipChain
+contract('DopeShop', ([deployer, seller, buyer]) => {
+    let dopeShop
 
     before(async () => {
-        flipChain = await FlipChain.deployed()
+        dopeShop = await DopeShop.deployed()
     })
 
 
     describe('deployment', async () => {
         it('deploys successfully', async () => {
-          const address = await flipChain.address
+          const address = await dopeShop.address
           assert.notEqual(address, 0x0)
           assert.notEqual(address, '')
           assert.notEqual(address, null)
@@ -22,8 +22,8 @@ contract('FlipChain', ([deployer, seller, buyer]) => {
         })
     
         it('has a name', async () => {
-          const name = await flipChain.name()
-          assert.equal(name, 'FlipChain')
+          const name = await dopeShop.name()
+          assert.equal(name, 'dopeShop')
         })
     })
 
@@ -33,8 +33,8 @@ contract('FlipChain', ([deployer, seller, buyer]) => {
         const name = 'Redmi'
 
         before(async () => {
-            result = await flipChain.addProduct(name, hash, 1, { from: seller })
-            productCount = await flipChain.productCount()
+            result = await dopeShop.addProduct(name, hash, 1, { from: seller })
+            productCount = await dopeShop.productCount()
         })
 
         it('adds product', async () => {
@@ -47,14 +47,14 @@ contract('FlipChain', ([deployer, seller, buyer]) => {
             assert.equal(event.seller, seller, 'seller is correct')
       
       
-            await flipChain.addProduct('', hash, 1, { from: seller }).should.be.rejected;
-            await flipChain.addProduct(name, '', 1, { from: seller }).should.be.rejected;
-            await flipChain.addProduct(name, hash, 0, { from: seller }).should.be.rejected;
-            await flipChain.addProduct(name, hash, 1, { from: '0x0' }).should.be.rejected;
+            await dopeShop.addProduct('', hash, 1, { from: seller }).should.be.rejected;
+            await dopeShop.addProduct(name, '', 1, { from: seller }).should.be.rejected;
+            await dopeShop.addProduct(name, hash, 0, { from: seller }).should.be.rejected;
+            await dopeShop.addProduct(name, hash, 1, { from: '0x0' }).should.be.rejected;
         })
 
         it('lists products', async () => {
-            const product = await flipChain.products(productCount)
+            const product = await dopeShop.products(productCount)
             assert.equal(product.id.toNumber(), productCount.toNumber(), 'id is correct')
             assert.equal(product.name, name, 'name is correct')
             assert.equal(product.imgHash, hash, 'imgHash is correct')
@@ -70,10 +70,10 @@ contract('FlipChain', ([deployer, seller, buyer]) => {
             let oldSellerBalance = await web3.eth.getBalance(seller)
             oldSellerBalance = new web3.utils.BN(oldSellerBalance)
             
-            productCount = await flipChain.productCount()
-            const product = await flipChain.products(productCount)
-            result = await flipChain.createOrder(productCount, { from: buyer, value: web3.utils.toWei(product.price, 'Ether') })
-            ordersCount = await flipChain.ordersCount()
+            productCount = await dopeShop.productCount()
+            const product = await dopeShop.products(productCount)
+            result = await dopeShop.createOrder(productCount, { from: buyer, value: web3.utils.toWei(product.price, 'Ether') })
+            ordersCount = await dopeShop.ordersCount()
             assert.equal(ordersCount, 1)
             
             const event = result.logs[0].args
@@ -89,13 +89,13 @@ contract('FlipChain', ([deployer, seller, buyer]) => {
             const expectedBalance = oldSellerBalance.add(paidAmount)
             assert.equal(newSellerBalance.toString(), expectedBalance.toString())
 
-            await flipChain.createOrder(0, { from: buyer }).should.be.rejected;
-            await flipChain.createOrder(10, { from: '0x0' }).should.be.rejected;
-            await flipChain.createOrder(1, { from: seller }).should.be.rejected;
+            await dopeShop.createOrder(0, { from: buyer }).should.be.rejected;
+            await dopeShop.createOrder(10, { from: '0x0' }).should.be.rejected;
+            await dopeShop.createOrder(1, { from: seller }).should.be.rejected;
         })
 
         it('lists orders', async () => {
-            const order = await flipChain.orders(ordersCount)
+            const order = await dopeShop.orders(ordersCount)
             assert.equal(order.id.toNumber(), ordersCount.toNumber(), 'id is correct')
             assert.equal(order.productId.toNumber(), productCount.toNumber(), 'productId is correct')
             assert.equal(order.buyer, buyer, 'buyer is correct')

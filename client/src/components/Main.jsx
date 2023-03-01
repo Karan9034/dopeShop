@@ -1,4 +1,6 @@
 import React from 'react';
+import OrderList from './OrderList';
+import SaleList from './SaleList';
 import ProductForm from './ProductForm';
 import ProductList from './ProductList';
 
@@ -14,11 +16,17 @@ class Main extends React.Component{
             )
         }else if(this.props.show==='orders'){
             return (
-                <div>orders</div>
+                <div id="products">
+                    <h2>My Orders</h2>
+                    <OrderList products={this.props.products} orders={this.props.orders}/>
+                </div>
             )
-        }else{
+        }else if(this.props.show==='sales'){
             return (
-                <div>sales</div>
+                <div id="products">
+                    <h2>My Sales</h2>
+                    <SaleList products={this.props.myProducts} sales={this.props.sales}/>
+                </div>
             )
         }
     }
