@@ -74,18 +74,20 @@ npm run truffle:install
 
 3. Now, start a local Ethereum blockchain network on your system using Ganache. Ganache provides you with 10 testing accounts each with 100 ETH. 
 
-4. Then, copy the following commands to deploy the smart contracts to the local Ethereum blockchain and start the React app:
+4. Obtain Infura API Key and API Secret for IPFS from [Infura Dashboard](https://infura.io/), and create a dedicated gateway for your project. Set the environment variables in `client/.env` file.
+
+5. Then, copy the following commands to deploy the smart contracts to the local Ethereum blockchain and start the React app:
 
 ```
 npm run truffle:migrate
 npm run client:start
 ```
 
-5. Set up Metamask to connect to the local blockchain created by Ganache(i.e. [http://localhost:7545/](http://localhost:7545/))
+6. Set up Metamask to connect to the local blockchain created by Ganache(i.e. [http://localhost:7545/](http://localhost:7545/))
 
-6. Now, obtain the private keys of some of the accounts from Ganache and import the accounts into Metamask wallet.
+7. Now, obtain the private keys of some of the accounts from Ganache and import the accounts into Metamask wallet.
 
-7. You're ready to go. Visit [http://localhost:3000/](http://localhost:3000/) to check out dopeShop
+8. You're ready to go. Visit [http://localhost:3000/](http://localhost:3000/) to check out dopeShop
 
 <!-- ### 📉 Relevant Screenshots:
 
